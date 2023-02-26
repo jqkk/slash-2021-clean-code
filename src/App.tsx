@@ -1,11 +1,11 @@
 import tw from 'twin.macro';
 
-import { Button } from '@/components';
+import { QuestionPage } from '@/pages';
 
 const App = () => (
   <Container>
     <MobileContainer>
-      <Button>질문하기</Button>
+      <QuestionPage />
     </MobileContainer>
   </Container>
 );
