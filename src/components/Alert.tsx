@@ -6,16 +6,24 @@ type AlertProps = {
   titleText: string;
   infoText: string;
   cancelable?: boolean;
+  onConfirm?: () => void;
+  onCancel?: () => void;
 };
 
-const Alert = ({ titleText, infoText, cancelable = false }: AlertProps) => (
+const Alert = ({
+  titleText,
+  infoText,
+  cancelable = false,
+  onConfirm = () => {},
+  onCancel = () => {},
+}: AlertProps) => (
   <WrappingContainer>
     <Container>
       <Title>{titleText}</Title>
       <Info>{infoText}</Info>
       <ButtonContainer>
-        {cancelable && <CancelButton>취소</CancelButton>}
-        <ConfirmButton>확인</ConfirmButton>
+        {cancelable && <CancelButton onClick={onCancel}>취소</CancelButton>}
+        <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
       </ButtonContainer>
     </Container>
   </WrappingContainer>
