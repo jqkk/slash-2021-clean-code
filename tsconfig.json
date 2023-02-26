@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "es5", // 타입스크립트 파일을 어떤 버전의 자바스크립트로 바꿔줄지 정하는 옵션
+    "module": "commonjs", // 모듈을 위한 코드 생성 설정
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // 컴파일에 포함될 라이브러리 파일 목록
+    "strict": true, // strict 관련 모두 전부 키는 설정
+    "jsx": "react-jsx", // tsx 파일을 jsx로 어떻게 컴파일할 것인지
+    "jsxImportSource": "@emotion/react", // jsx를 어떤 라이브러리로 컴파일할 것인지
+    "allowJs": false, // js 파일을 ts에서 import해서 쓸 수 있는지
+    "useDefineForClassFields": true,
+    "skipLibCheck": true, // 정의 파일의 타입 확인을 건너 뛸지 여부
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true, // 같은 파일에 대한 일관되지 않은 참조를 허용하지 않을 지 여부
+    "moduleResolution": "Node", // 모듈 해석 옵션
+    "resolveJsonModule": true,
+    "isolatedModules": true, // 각 파일을 분리된 모듈로 트랜스파일
+    "noEmit": true, // 결과 파일을 내보낼지 여부
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
