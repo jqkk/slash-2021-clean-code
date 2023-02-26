@@ -1,22 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 
+import { useAtomValue, useSetAtom } from 'jotai';
 import tw from 'twin.macro';
 
-import { Alert, Button, Input } from '@/components';
+import { Button, Input } from '@/components';
 import { useInput } from '@/hooks';
 
+import QuestionRegisterPopup from './QuestionRegisterPopup';
+import TermOfUsePopup from './TermOfUsePopup';
+import {
+  dequeueModalPopupQueueAtom,
+  pushModalPopupQueueAtom,
+} from '../store/actions';
+import { currentModalPopupAtom } from '../store/atoms';
+import { 이용약관동의여부확인 } from '../utils';
+
 const QuestionForm = () => {
-  const [open, setOpen] = useState(false);
+  const modalPopup = useAtomValue(currentModalPopupAtom);
+  const createModalPopup = useSetAtom(pushModalPopupQueueAtom);
+  const closeModalPopup = useSetAtom(dequeueModalPopupQueueAtom);
   const { value: question, onChange, reset } = useInput();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    reset();
-    setOpen(true);
-  };
-
-  const handleConfirm = () => {
-    setOpen(false);
+    const 약관동의여부 = 이용약관동의여부확인();
+    if (!약관동의여부) {
+      createModalPopup(<TermOfUsePopup />);
+    }
+    createModalPopup(
+      <QuestionRegisterPopup
+        onConfirm={() => {
+          closeModalPopup();
+          reset();
+        }}
+      />,
+    );
   };
 
   return (
@@ -30,13 +48,7 @@ const QuestionForm = () => {
         />
         <Button type='submit'>질문하기</Button>
       </Form>
-      {open && (
-        <Alert
-          titleText='질문이 등록되었어요'
-          infoText='답변이 오면 알려드릴게요.'
-          onConfirm={handleConfirm}
-        />
-      )}
+      {modalPopup}
     </>
   );
 };
