@@ -25,7 +25,7 @@ const WrappingContainer = tw.div`absolute top-0 left-0 w-full min-h-screen flex 
 const Container = tw.div`bg-white rounded-2xl py-5 px-6 min-w-[313px]`;
 
 const Title = tw.h3`text-slate-900 font-bold text-2xl leading-none  mb-2.5`;
-const Info = tw.h3`text-slate-900 opacity-60 mb-7`;
+const Info = tw.p`text-slate-900 opacity-60 mb-7`;
 
 const ButtonContainer = tw.div`flex flex-row-reverse gap-5`;
 const ConfirmButton = styled(Button)({
