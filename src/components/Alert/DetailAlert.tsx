@@ -1,22 +1,25 @@
 import tw from 'twin.macro';
 
-import Button from './Button';
+import Button from '../Button';
+import Portal from '../Portal';
 
-type ModalProps = {
+type DetailAlertProps = {
   titleText: string;
   infoText: string;
   contents?: React.ReactNode;
 };
 
-const Modal = ({ titleText, infoText, contents }: ModalProps) => (
-  <WrappingContainer>
-    <Container>
-      <Title>{titleText}</Title>
-      <Info>{infoText}</Info>
-      {contents && <ContentsContainer>{contents}</ContentsContainer>}
-      <Button>확인</Button>
-    </Container>
-  </WrappingContainer>
+const DetailAlert = ({ titleText, infoText, contents }: DetailAlertProps) => (
+  <Portal>
+    <WrappingContainer>
+      <Container>
+        <Title>{titleText}</Title>
+        <Info>{infoText}</Info>
+        {contents && <ContentsContainer>{contents}</ContentsContainer>}
+        <Button>확인</Button>
+      </Container>
+    </WrappingContainer>
+  </Portal>
 );
 
 const WrappingContainer = tw.div`absolute top-0 left-0 w-full min-h-screen flex justify-center items-center`;
@@ -27,4 +30,4 @@ const Info = tw.p`text-slate-900 opacity-60 mb-6`;
 
 const ContentsContainer = tw.div`mb-[50px]`;
 
-export default Modal;
+export default DetailAlert;

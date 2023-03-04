@@ -1,32 +1,33 @@
 import tw, { styled } from 'twin.macro';
 
-import Button from './Button';
+import Button from '../Button';
+import Portal from '../Portal';
 
-type AlertProps = {
+type ConfirmAlertProps = {
   titleText: string;
   infoText: string;
-  cancelable?: boolean;
   onConfirm?: () => void;
   onCancel?: () => void;
 };
 
-const Alert = ({
+const ConfirmAlert = ({
   titleText,
   infoText,
-  cancelable = false,
   onConfirm = () => {},
   onCancel = () => {},
-}: AlertProps) => (
-  <WrappingContainer>
-    <Container>
-      <Title>{titleText}</Title>
-      <Info>{infoText}</Info>
-      <ButtonContainer>
-        {cancelable && <CancelButton onClick={onCancel}>취소</CancelButton>}
-        <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
-      </ButtonContainer>
-    </Container>
-  </WrappingContainer>
+}: ConfirmAlertProps) => (
+  <Portal>
+    <WrappingContainer>
+      <Container>
+        <Title>{titleText}</Title>
+        <Info>{infoText}</Info>
+        <ButtonContainer>
+          <CancelButton onClick={onCancel}>취소</CancelButton>
+          <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
+        </ButtonContainer>
+      </Container>
+    </WrappingContainer>
+  </Portal>
 );
 
 const WrappingContainer = tw.div`absolute top-0 left-0 w-full min-h-screen flex justify-center items-center`;
@@ -43,4 +44,4 @@ const CancelButton = styled(Button)({
   ...tw`text-slate-900  bg-transparent  w-fit h-fit`,
 });
 
-export default Alert;
+export default ConfirmAlert;
