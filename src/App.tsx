@@ -1,11 +1,13 @@
 import tw from 'twin.macro';
 
+import { Alert } from '@/components';
 import { QuestionPage } from '@/pages';
 
 const App = () => (
   <Container>
     <MobileContainer>
       <QuestionPage />
+      <Alert />
     </MobileContainer>
   </Container>
 );

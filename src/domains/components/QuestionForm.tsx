@@ -1,55 +1,59 @@
 import React from 'react';
 
-import { useAtomValue, useSetAtom } from 'jotai';
 import tw from 'twin.macro';
 
-import { Button, Input } from '@/components';
-import { useInput } from '@/hooks';
-
-import QuestionRegisterPopup from './QuestionRegisterPopup';
-import TermOfUsePopup from './TermOfUsePopup';
 import {
-  dequeueModalPopupQueueAtom,
-  pushModalPopupQueueAtom,
-} from '../store/actions';
-import { currentModalPopupAtom } from '../store/atoms';
-import { 이용약관동의여부확인 } from '../utils';
+  BasicAlert,
+  Button,
+  ConfirmAlert,
+  DetailAlert,
+  Input,
+} from '@/components';
+import { useInput, useAlert } from '@/hooks';
+
+import { 이용약관동의여부확인, 이용약관동의하기 } from '../utils';
 
 const QuestionForm = () => {
-  const modalPopup = useAtomValue(currentModalPopupAtom);
-  const createModalPopup = useSetAtom(pushModalPopupQueueAtom);
-  const closeModalPopup = useSetAtom(dequeueModalPopupQueueAtom);
-  const { value: question, onChange, reset } = useInput();
+  const { value: question, onChange } = useInput();
+  const { alert } = useAlert();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const 약관동의여부 = 이용약관동의여부확인();
     if (!약관동의여부) {
-      createModalPopup(<TermOfUsePopup />);
+      const response = await alert(ConfirmAlert, {
+        titleText: '약관에 동의하시겠습니까?',
+        infoText: '약관 동의가 필요합니다.',
+        onConfirm: () => {
+          이용약관동의하기();
+        },
+      });
+      if (!response) {
+        return;
+      }
     }
-    createModalPopup(
-      <QuestionRegisterPopup
-        onConfirm={() => {
-          closeModalPopup();
-          reset();
-        }}
-      />,
-    );
+
+    await alert(DetailAlert, {
+      titleText: '질문하기',
+      infoText: 'KIM이 설명해드려요',
+    });
+
+    alert(BasicAlert, {
+      titleText: '질문이 등록되었어요',
+      infoText: '답변이 등록되면 알려드릴게요',
+    });
   };
 
   return (
-    <>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          placeholder='어떤 내용이 궁금한가요?'
-          tw='mb-7'
-          onChange={onChange}
-          value={question}
-        />
-        <Button type='submit'>질문하기</Button>
-      </Form>
-      {modalPopup}
-    </>
+    <Form onSubmit={handleSubmit}>
+      <Input
+        placeholder='어떤 내용이 궁금한가요?'
+        tw='mb-7'
+        onChange={onChange}
+        value={question}
+      />
+      <Button type='submit'>질문하기</Button>
+    </Form>
   );
 };
 

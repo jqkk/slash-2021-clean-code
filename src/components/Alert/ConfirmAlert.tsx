@@ -1,33 +1,46 @@
 import tw, { styled } from 'twin.macro';
 
-import Button from './Button';
+import Button from '../Button';
 
-type AlertProps = {
+import type { AlertProps } from './Alert';
+
+type ConfirmAlertProps = AlertProps & {
   titleText: string;
   infoText: string;
-  cancelable?: boolean;
   onConfirm?: () => void;
   onCancel?: () => void;
 };
 
-const Alert = ({
+const ConfirmAlert = ({
   titleText,
   infoText,
-  cancelable = false,
   onConfirm = () => {},
   onCancel = () => {},
-}: AlertProps) => (
-  <WrappingContainer>
-    <Container>
-      <Title>{titleText}</Title>
-      <Info>{infoText}</Info>
-      <ButtonContainer>
-        {cancelable && <CancelButton onClick={onCancel}>취소</CancelButton>}
-        <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
-      </ButtonContainer>
-    </Container>
-  </WrappingContainer>
-);
+  onClose,
+}: ConfirmAlertProps) => {
+  const handleConfirm = () => {
+    onConfirm();
+    onClose(true);
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    onClose(false);
+  };
+
+  return (
+    <WrappingContainer>
+      <Container>
+        <Title>{titleText}</Title>
+        <Info>{infoText}</Info>
+        <ButtonContainer>
+          <CancelButton onClick={handleCancel}>취소</CancelButton>
+          <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton>
+        </ButtonContainer>
+      </Container>
+    </WrappingContainer>
+  );
+};
 
 const WrappingContainer = tw.div`absolute top-0 left-0 w-full min-h-screen flex justify-center items-center`;
 const Container = tw.div`bg-white rounded-2xl py-5 px-6 min-w-[313px]`;
@@ -43,4 +56,4 @@ const CancelButton = styled(Button)({
   ...tw`text-slate-900  bg-transparent  w-fit h-fit`,
 });
 
-export default Alert;
+export default ConfirmAlert;
