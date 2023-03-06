@@ -1,3 +1,3 @@
 export { default as Button } from './Button';
 export { default as Input } from './Input';
-export { Alert, ConfirmAlert, DetailAlert } from './Alert';
+export { Alert, BasicAlert, ConfirmAlert, DetailAlert } from './Alert';

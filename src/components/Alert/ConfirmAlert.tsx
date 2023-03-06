@@ -1,9 +1,10 @@
 import tw, { styled } from 'twin.macro';
 
 import Button from '../Button';
-import Portal from '../Portal';
 
-type ConfirmAlertProps = {
+import type { AlertProps } from './Alert';
+
+type ConfirmAlertProps = AlertProps & {
   titleText: string;
   infoText: string;
   onConfirm?: () => void;
@@ -15,20 +16,31 @@ const ConfirmAlert = ({
   infoText,
   onConfirm = () => {},
   onCancel = () => {},
-}: ConfirmAlertProps) => (
-  <Portal>
+  onClose,
+}: ConfirmAlertProps) => {
+  const handleConfirm = () => {
+    onConfirm();
+    onClose(true);
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    onClose(false);
+  };
+
+  return (
     <WrappingContainer>
       <Container>
         <Title>{titleText}</Title>
         <Info>{infoText}</Info>
         <ButtonContainer>
-          <CancelButton onClick={onCancel}>취소</CancelButton>
-          <ConfirmButton onClick={onConfirm}>확인</ConfirmButton>
+          <CancelButton onClick={handleCancel}>취소</CancelButton>
+          <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton>
         </ButtonContainer>
       </Container>
     </WrappingContainer>
-  </Portal>
-);
+  );
+};
 
 const WrappingContainer = tw.div`absolute top-0 left-0 w-full min-h-screen flex justify-center items-center`;
 const Container = tw.div`bg-white rounded-2xl py-5 px-6 min-w-[313px]`;
