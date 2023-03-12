@@ -13,7 +13,8 @@ let agreement = false;
 
 export const handlers = [
   rest.get('/api/agreement', async (req, res, ctx) => {
-    await delay(1000);
+    const isError = generateRandomBoolean();
+    await delay(isError ? 5000 : 1000);
     return res(ctx.json({ agreement }));
   }),
   rest.post('/api/agreement', async (req, res, ctx) => {
