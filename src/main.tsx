@@ -8,9 +8,11 @@ import GlobalStyles from '@/styles/GlobalStyles';
 
 import App from './App';
 
-worker.start({
-  onUnhandledRequest: 'bypass',
-});
+if (process.env.NODE_ENV === 'development') {
+  worker.start({
+    onUnhandledRequest: 'bypass',
+  });
+}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
