@@ -9,36 +9,60 @@ import {
   DetailAlert,
   Input,
 } from '@/components';
-import { useInput, useAlert } from '@/hooks';
+import { useInput, useAlert, usePromise } from '@/hooks';
 
-import { 이용약관동의여부확인, 이용약관동의하기 } from '../utils';
+import { agreement, counselor } from '../api';
 
 const QuestionForm = () => {
   const { value: question, onChange } = useInput();
+  const { promise } = usePromise();
   const { alert } = useAlert();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const 약관동의여부 = 이용약관동의여부확인();
-    if (!약관동의여부) {
+    try {
+      e.preventDefault();
+      const response = await handle약관동의팝업();
+      if (response) {
+        await handle연결전문가질문제출();
+        handle새전문가질문제출();
+      }
+    } catch(e){
+      alert(BasicAlert, {
+        titleText: 'Error',
+        infoText: '다시시도해주세요'
+      })
+    }
+  };
+
+  const handle약관동의팝업 = async () => {
+    const 약관동의 = await promise(agreement.getAgreement);
+    if (!약관동의) {
       const response = await alert(ConfirmAlert, {
         titleText: '약관에 동의하시겠습니까?',
         infoText: '약관 동의가 필요합니다.',
-        onConfirm: () => {
-          이용약관동의하기();
+        onConfirm: async () => {
+          await promise(agreement.setAgreement);
         },
       });
       if (!response) {
-        return;
+        return false;
       }
     }
+    return true;
+  };
 
-    await alert(DetailAlert, {
-      titleText: '질문하기',
-      infoText: 'KIM이 설명해드려요',
-    });
-
-    alert(BasicAlert, {
+  const handle연결전문가질문제출 = async () => {
+    const response = await promise(counselor.getCounselor);
+    if (response) {
+      await alert(DetailAlert, {
+        titleText: '질문하기',
+        infoText: `${response.name}이 설명해드려요`,
+        contents: <img src={response.image} alt='연결전문가' />,
+      });
+    }
+  };
+  const handle새전문가질문제출 = async () => {
+    await alert(BasicAlert, {
       titleText: '질문이 등록되었어요',
       infoText: '답변이 등록되면 알려드릴게요',
     });

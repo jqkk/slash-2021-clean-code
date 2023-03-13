@@ -7,6 +7,12 @@ const customStyles = css({
   html: {
     fontFamily: 'Noto Sans',
   },
+  '#root > button': {
+    backgroundColor: '#25262b',
+  },
+  '.jotai-devtools-UnstyledButton-root img': {
+    maxWidth: 'initial',
+  },
 });
 
 const GlobalStyles = () => (

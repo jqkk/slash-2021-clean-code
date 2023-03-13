@@ -1,6 +1,6 @@
 import tw from 'twin.macro';
 
-import { Alert } from '@/components';
+import { Alert, Loading } from '@/components';
 import { QuestionPage } from '@/pages';
 
 const App = () => (
@@ -8,6 +8,7 @@ const App = () => (
     <MobileContainer>
       <QuestionPage />
       <Alert />
+      <Loading />
     </MobileContainer>
   </Container>
 );
