@@ -49,6 +49,7 @@ const QuestionForm = () => {
       if (!response) {
         return false;
       }
+      await delay(500);
     }
     return true;
   };
