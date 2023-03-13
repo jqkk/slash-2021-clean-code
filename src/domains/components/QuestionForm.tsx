@@ -14,7 +14,7 @@ import { useInput, useAlert, usePromise } from '@/hooks';
 import { agreement, counselor } from '../api';
 
 const QuestionForm = () => {
-  const { value: question, onChange } = useInput();
+  const { value: question, onChange, reset } = useInput();
   const { promise } = usePromise();
   const { alert } = useAlert();
 
@@ -24,7 +24,8 @@ const QuestionForm = () => {
       const response = await handle약관동의팝업();
       if (response) {
         await handle연결전문가질문제출();
-        handle새전문가질문제출();
+        await handle새전문가질문제출();
+        reset()
       }
     } catch(e){
       alert(BasicAlert, {
