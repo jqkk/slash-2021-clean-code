@@ -19,11 +19,18 @@ const QuestionForm = () => {
   const { alert } = useAlert();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const response = await handle약관동의팝업();
-    if (response) {
-      await handle연결전문가질문제출();
-      handle새전문가질문제출();
+    try {
+      e.preventDefault();
+      const response = await handle약관동의팝업();
+      if (response) {
+        await handle연결전문가질문제출();
+        handle새전문가질문제출();
+      }
+    } catch(e){
+      alert(BasicAlert, {
+        titleText: 'Error',
+        infoText: '다시시도해주세요'
+      })
     }
   };
 
