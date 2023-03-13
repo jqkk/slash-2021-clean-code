@@ -6,7 +6,7 @@ export const closeAtom = atom(null, (get, set, state: boolean) => {
   const { responseHandler } = get(alertAtom);
   responseHandler(state);
   set(alertAtom, {
-    Component: () => <div />,
+    Component: null,
     props: {},
     responseHandler: () => {},
   });
