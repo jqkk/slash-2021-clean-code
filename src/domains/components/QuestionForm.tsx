@@ -10,11 +10,12 @@ import {
   Input,
 } from '@/components';
 import { useInput, useAlert, usePromise } from '@/hooks';
+import { delay } from '@/utils';
 
 import { agreement, counselor } from '../api';
 
 const QuestionForm = () => {
-  const { value: question, onChange } = useInput();
+  const { value: question, onChange, reset } = useInput();
   const { promise } = usePromise();
   const { alert } = useAlert();
 
@@ -24,13 +25,14 @@ const QuestionForm = () => {
       const response = await handle약관동의팝업();
       if (response) {
         await handle연결전문가질문제출();
-        handle새전문가질문제출();
+        await handle새전문가질문제출();
+        reset();
       }
-    } catch(e){
+    } catch (e) {
       alert(BasicAlert, {
         titleText: 'Error',
-        infoText: '다시시도해주세요'
-      })
+        infoText: '다시시도해주세요',
+      });
     }
   };
 
@@ -47,6 +49,7 @@ const QuestionForm = () => {
       if (!response) {
         return false;
       }
+      await delay(500);
     }
     return true;
   };
@@ -59,8 +62,10 @@ const QuestionForm = () => {
         infoText: `${response.name}이 설명해드려요`,
         contents: <img src={response.image} alt='연결전문가' />,
       });
+      await delay(500);
     }
   };
+
   const handle새전문가질문제출 = async () => {
     await alert(BasicAlert, {
       titleText: '질문이 등록되었어요',

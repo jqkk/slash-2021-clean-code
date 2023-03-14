@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { closeAtom } from '@/stores/actions/alert';
@@ -15,7 +16,20 @@ const Alert = () => {
     close(value);
   };
 
-  return <Component {...props} onClose={onClose} />;
+  return (
+    <AnimatePresence>
+      {Component && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{
+            opacity: 0,
+          }}>
+          <Component {...props} onClose={onClose} />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default Alert;
