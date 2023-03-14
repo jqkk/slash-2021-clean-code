@@ -1,7 +1,7 @@
 import { BasicAlert, Button } from '@/components';
 import { useAlert, usePromise } from '@/hooks';
 
-import { counselor } from '../api';
+import { counselor } from '../api/local';
 
 type QuestionSubmitButtonProps =
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
