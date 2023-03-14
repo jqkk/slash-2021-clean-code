@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import { closeAtom } from '@/stores/actions/alert';
-import { alertAtom } from '@/stores/atoms/alert';
+import { alertAtom, closeAlertAtom } from '@/atoms/alert';
 
 export type AlertProps = {
   onClose: (value: boolean) => void;
@@ -10,7 +9,7 @@ export type AlertProps = {
 
 const Alert = () => {
   const { Component, props } = useAtomValue(alertAtom);
-  const close = useSetAtom(closeAtom);
+  const close = useSetAtom(closeAlertAtom);
 
   const onClose = (value: boolean) => {
     close(value);
