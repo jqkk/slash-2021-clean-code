@@ -1,7 +1,7 @@
 import tw from 'twin.macro';
 
 import { BasicAlert, DetailAlert, Input } from '@/components';
-import { useInput, useAlert } from '@/hooks';
+import { useInput, useAlert, usePromise } from '@/hooks';
 
 import QuestionSubmitButton from './QuestionSubmitButton';
 import { question } from '../api';
@@ -10,6 +10,7 @@ import { useAgreement } from '../hooks';
 const QuestionForm = () => {
   const { value: questionInput, onChange, reset } = useInput();
   const { alert } = useAlert();
+  const { promise } = usePromise();
   const { openPopupToNotAgreedUsers } = useAgreement();
 
   const handleClickWithoutExpert = async () => {
@@ -17,7 +18,7 @@ const QuestionForm = () => {
     if (!약관동의여부) {
       return;
     }
-    await question.sendQuestion(questionInput);
+    await promise(() => question.sendQuestion(questionInput));
     await alert(BasicAlert, {
       titleText: '질문이 등록되었어요',
       infoText: '답변이 등록되면 알려드릴게요',
@@ -38,9 +39,9 @@ const QuestionForm = () => {
     if (!약관동의여부) {
       return;
     }
-    await question.sendQuestion(questionInput, expert.name);
+    await promise(() => question.sendQuestion(questionInput, expert.name));
     await alert(BasicAlert, {
-      titleText: `질문이 등록되었어요`,
+      titleText: '질문이 등록되었어요',
       infoText: '답변이 등록되면 알려드릴게요',
     });
     reset();
