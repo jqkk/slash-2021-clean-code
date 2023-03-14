@@ -12,23 +12,53 @@ import {
 import { useInput, useAlert, usePromise } from '@/hooks';
 import { delay } from '@/utils';
 
-import { agreement, counselor } from '../api';
+import { agreement, counselor, question } from '../api';
 
 const QuestionForm = () => {
-  const { value: question, onChange, reset } = useInput();
+  const { value: questionInput, onChange, reset } = useInput();
   const { promise } = usePromise();
   const { alert } = useAlert();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      const response = await handle약관동의팝업();
-      if (response) {
-        await handle연결전문가질문제출();
-        await handle새전문가질문제출();
-        reset();
+      if(questionInput === ''){
+        alert(BasicAlert, {
+          titleText: 'Error',
+          infoText: '질문을 입력해주세요'
+        })
+        return;
       }
-    } catch (e) {
+      const 연결전문가 = await promise(counselor.getCounselor)
+      if(연결전문가 !== null){
+        await alert(DetailAlert, {
+          titleText: '질문하기',
+          infoText: `${연결전문가.name}이 설명해드려요`,
+          contents: <img src={연결전문가.image} alt='연결전문가' />,
+        });
+        const 약관동의여부 = await handle약관동의팝업()
+        if(!약관동의여부){
+          return
+        }
+        await question.sendQuestion(questionInput, 연결전문가.name)
+        await alert(BasicAlert, {
+          titleText: `질문이 등록되었어요`,
+          infoText: '답변이 등록되면 알려드릴게요',
+        });
+        reset()
+      } else {
+        const 약관동의여부 = await handle약관동의팝업()
+        if(!약관동의여부){
+          return
+        }
+        // 질문 전송
+        await alert(BasicAlert, {
+          titleText: '질문이 등록되었어요',
+          infoText: '답변이 등록되면 알려드릴게요',
+        });
+        reset()
+      }
+    } catch(e){
       alert(BasicAlert, {
         titleText: 'Error',
         infoText: '다시시도해주세요',
@@ -37,6 +67,7 @@ const QuestionForm = () => {
   };
 
   const handle약관동의팝업 = async () => {
+    // 약관 동의 커스텀 훅으로 빼기
     const 약관동의 = await promise(agreement.getAgreement);
     if (!약관동의) {
       const response = await alert(ConfirmAlert, {
@@ -54,32 +85,13 @@ const QuestionForm = () => {
     return true;
   };
 
-  const handle연결전문가질문제출 = async () => {
-    const response = await promise(counselor.getCounselor);
-    if (response) {
-      await alert(DetailAlert, {
-        titleText: '질문하기',
-        infoText: `${response.name}이 설명해드려요`,
-        contents: <img src={response.image} alt='연결전문가' />,
-      });
-      await delay(500);
-    }
-  };
-
-  const handle새전문가질문제출 = async () => {
-    await alert(BasicAlert, {
-      titleText: '질문이 등록되었어요',
-      infoText: '답변이 등록되면 알려드릴게요',
-    });
-  };
-
   return (
     <Form onSubmit={handleSubmit}>
       <Input
         placeholder='어떤 내용이 궁금한가요?'
         tw='mb-7'
         onChange={onChange}
-        value={question}
+        value={questionInput}
       />
       <Button type='submit'>질문하기</Button>
     </Form>

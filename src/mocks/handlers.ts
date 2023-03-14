@@ -12,11 +12,7 @@ const delay = (ms: number) =>
 let agreement = false;
 
 export const handlers = [
-  rest.get('/api/agreement', async (req, res, ctx) => {
-    const isError = generateRandomBoolean();
-    await delay(isError ? 5000 : 1000);
-    return res(ctx.json({ agreement }));
-  }),
+  rest.get('/api/agreement', async (req, res, ctx) => res(ctx.json({ agreement }))),
   rest.post('/api/agreement', async (req, res, ctx) => {
     await delay(1000);
     agreement = true;
@@ -35,4 +31,9 @@ export const handlers = [
     }
     return res(ctx.json(null));
   }),
+  rest.post('/api/question', async(req, res, ctx) => {
+    // eslint-disable-next-line no-console
+    console.log(req.body)
+    return res(ctx.status(201));
+  })
 ];
