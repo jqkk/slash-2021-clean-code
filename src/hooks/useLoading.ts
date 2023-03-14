@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 
-import { loadingAtom } from '@/stores/atoms/loading';
+import { loadingAtom } from '@/atoms/loading';
 
 const useLoading = () => {
   const [loading, setLoading] = useAtom(loadingAtom);
