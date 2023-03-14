@@ -2,6 +2,7 @@ import tw from 'twin.macro';
 
 import { BasicAlert, DetailAlert, Input } from '@/components';
 import { useInput, useAlert, usePromise } from '@/hooks';
+import { delay } from '@/utils';
 
 import QuestionSubmitButton from './QuestionSubmitButton';
 import { question } from '../api';
@@ -35,6 +36,7 @@ const QuestionForm = () => {
       infoText: `${expert.name}이 설명해드려요`,
       contents: <img src={expert.image} alt='연결전문가' />,
     });
+    await delay(500);
     const 약관동의여부 = await openPopupToNotAgreedUsers();
     if (!약관동의여부) {
       return;

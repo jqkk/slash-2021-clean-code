@@ -12,14 +12,16 @@ const delay = (ms: number) =>
 let agreement = false;
 
 export const handlers = [
-  rest.get('/api/agreement', async (req, res, ctx) => res(ctx.json({ agreement }))),
+  rest.get('/api/agreement', async (req, res, ctx) =>
+    res(ctx.json({ agreement })),
+  ),
   rest.post('/api/agreement', async (req, res, ctx) => {
-    await delay(1000);
+    await delay(500);
     agreement = true;
     return res(ctx.status(201));
   }),
   rest.get('/api/counselor', async (req, res, ctx) => {
-    await delay(1000);
+    await delay(500);
     const isWaitingForCounselor = generateRandomBoolean();
     if (isWaitingForCounselor) {
       return res(
@@ -31,9 +33,10 @@ export const handlers = [
     }
     return res(ctx.json(null));
   }),
-  rest.post('/api/question', async(req, res, ctx) => {
+  rest.post('/api/question', async (req, res, ctx) => {
     // eslint-disable-next-line no-console
-    console.log(req.body)
+    await delay(500);
+    console.log(req.body);
     return res(ctx.status(201));
-  })
+  }),
 ];
