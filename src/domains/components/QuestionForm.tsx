@@ -1,58 +1,68 @@
-import React from 'react';
-
 import tw from 'twin.macro';
 
-import {
-  BasicAlert,
-  Button,
-  ConfirmAlert,
-  DetailAlert,
-  Input,
-} from '@/components';
-import { useInput, useAlert } from '@/hooks';
+import { BasicAlert, DetailAlert, Input } from '@/components';
+import { useInput, useAlert, usePromise } from '@/hooks';
+import { delay } from '@/utils';
 
-import { 이용약관동의여부확인, 이용약관동의하기 } from '../utils';
+import QuestionSubmitButton from './QuestionSubmitButton';
+import { question } from '../api/local';
+import { useAgreement } from '../hooks';
 
 const QuestionForm = () => {
-  const { value: question, onChange } = useInput();
+  const { value: questionInput, onChange, reset } = useInput();
   const { alert } = useAlert();
+  const { promise } = usePromise();
+  const { openPopupToNotAgreedUsers } = useAgreement();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const 약관동의여부 = 이용약관동의여부확인();
+  const handleClickWithoutExpert = async () => {
+    const 약관동의여부 = await openPopupToNotAgreedUsers();
     if (!약관동의여부) {
-      const response = await alert(ConfirmAlert, {
-        titleText: '약관에 동의하시겠습니까?',
-        infoText: '약관 동의가 필요합니다.',
-        onConfirm: () => {
-          이용약관동의하기();
-        },
-      });
-      if (!response) {
-        return;
-      }
+      return;
     }
-
-    await alert(DetailAlert, {
-      titleText: '질문하기',
-      infoText: 'KIM이 설명해드려요',
-    });
-
-    alert(BasicAlert, {
+    await promise(() => question.sendQuestion(questionInput));
+    await alert(BasicAlert, {
       titleText: '질문이 등록되었어요',
       infoText: '답변이 등록되면 알려드릴게요',
     });
+    reset();
+  };
+
+  const handleClcikWithExpert = async (expert: {
+    name: string;
+    image: string;
+  }) => {
+    await alert(DetailAlert, {
+      titleText: '질문하기',
+      infoText: `${expert.name}이 설명해드려요`,
+      contents: <img src={expert.image} alt='연결전문가' />,
+    });
+    await delay(500);
+    const 약관동의여부 = await openPopupToNotAgreedUsers();
+    if (!약관동의여부) {
+      return;
+    }
+    await promise(() => question.sendQuestion(questionInput, expert.name));
+    await alert(BasicAlert, {
+      titleText: '질문이 등록되었어요',
+      infoText: '답변이 등록되면 알려드릴게요',
+    });
+    reset();
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form>
       <Input
         placeholder='어떤 내용이 궁금한가요?'
         tw='mb-7'
         onChange={onChange}
-        value={question}
+        value={questionInput}
       />
-      <Button type='submit'>질문하기</Button>
+      <QuestionSubmitButton
+        questionInput={questionInput}
+        onClickkWithExpert={handleClcikWithExpert}
+        onClickkWithoutExpert={handleClickWithoutExpert}>
+        질문하기
+      </QuestionSubmitButton>
     </Form>
   );
 };

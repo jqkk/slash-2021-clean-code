@@ -7,7 +7,7 @@ import type { AlertProps } from './Alert';
 type ConfirmAlertProps = AlertProps & {
   titleText: string;
   infoText: string;
-  onConfirm?: () => void;
+  onConfirm?: (() => void) | (() => Promise<void>);
   onCancel?: () => void;
 };
 
@@ -18,8 +18,8 @@ const ConfirmAlert = ({
   onCancel = () => {},
   onClose,
 }: ConfirmAlertProps) => {
-  const handleConfirm = () => {
-    onConfirm();
+  const handleConfirm = async () => {
+    await onConfirm();
     onClose(true);
   };
 
