@@ -1,7 +1,7 @@
 import { ConfirmAlert } from '@/components';
 import { useAlert, usePromise } from '@/hooks';
 
-import { agreement } from '../api';
+import { agreement } from '../api/local';
 
 const useAgreement = () => {
   const { promise } = usePromise();

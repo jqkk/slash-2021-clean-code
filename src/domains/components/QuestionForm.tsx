@@ -5,7 +5,7 @@ import { useInput, useAlert, usePromise } from '@/hooks';
 import { delay } from '@/utils';
 
 import QuestionSubmitButton from './QuestionSubmitButton';
-import { question } from '../api';
+import { question } from '../api/local';
 import { useAgreement } from '../hooks';
 
 const QuestionForm = () => {
