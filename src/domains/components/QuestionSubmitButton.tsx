@@ -17,12 +17,14 @@ const QuestionSubmitButton = ({
   questionInput,
   onClickkWithExpert,
   onClickkWithoutExpert,
+  children,
 }: QuestionSubmitButtonProps) => {
   const { promise } = usePromise();
   const { alert } = useAlert();
 
-  const handle질문제출 = async () => {
+  const handle질문제출 = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
+      e.preventDefault();
       if (questionInput === '') {
         alert(BasicAlert, {
           titleText: 'Error',
@@ -44,7 +46,11 @@ const QuestionSubmitButton = ({
     }
   };
 
-  return <Button type='submit' onSubmit={handle질문제출} />;
+  return (
+    <Button type='submit' onClick={handle질문제출}>
+      {children}
+    </Button>
+  );
 };
 
 export default QuestionSubmitButton;
