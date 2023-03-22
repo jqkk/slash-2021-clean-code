@@ -34,9 +34,7 @@ export const handlers = [
     return res(ctx.json(null));
   }),
   rest.post('/api/question', async (req, res, ctx) => {
-    // eslint-disable-next-line no-console
     await delay(500);
-    console.log(req.body);
     return res(ctx.status(201));
   }),
 ];

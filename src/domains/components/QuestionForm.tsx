@@ -27,7 +27,7 @@ const QuestionForm = () => {
     reset();
   };
 
-  const handleClcikWithExpert = async (expert: {
+  const handleClickWithExpert = async (expert: {
     name: string;
     image: string;
   }) => {
@@ -59,7 +59,7 @@ const QuestionForm = () => {
       />
       <QuestionSubmitButton
         questionInput={questionInput}
-        onClickkWithExpert={handleClcikWithExpert}
+        onClickkWithExpert={handleClickWithExpert}
         onClickkWithoutExpert={handleClickWithoutExpert}>
         질문하기
       </QuestionSubmitButton>
