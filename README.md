@@ -60,7 +60,7 @@ pnpm i && pnpm dev
 
   - ex) theme, loading, alert
 
-- components : 도메인에 종속되지 않은 순수한 컴포넌트를 정의합니다. 다른 프로젝트에서 해당 폴더를 떼어서 사용할 수 있을 정도의 순수함을 유지합니다.
+- components : 도메인에 종속되지 않은 순수한 컴포넌트를 정의합니다. 다른 프로젝트에서 해당 폴더를 떼어서 사용할 수 있을 정도의 순수성을 유지합니다.
 
   - ex) button, input
 
@@ -135,3 +135,13 @@ pnpm i && pnpm dev
    - 기능별로 
 - 커밋 메시지 규칙
    - feat
+
+## 컴포넌트의 덩치를 줄일 수 있는 방법
+
+1. custom hook을 활용한다.
+
+2. container-presenter 패턴을 활용한다.
+
+3. container-presenter 패턴과 custom hook을 함께 활용한다.
+
+4. 컴포넌트를 더 높은 상태로 추상화시킨다.
