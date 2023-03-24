@@ -21,8 +21,8 @@ pnpm i && pnpm dev
 ## 기술 스택
 
 ```
-- Typescript
-- React 18
+- typescript
+- react 18
 - jotai
 - framer-motion
 - axios
