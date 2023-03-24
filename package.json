@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "jqkk",
+    "email": "kkj2551@naver.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
